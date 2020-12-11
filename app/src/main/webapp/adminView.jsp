@@ -7,7 +7,7 @@
 --%>
 
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="Main.Person" %>
+<%@ page import="Main.model.User" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -16,8 +16,8 @@
 </head>
 <body>
 <%
-    ArrayList<Person> users = (ArrayList<Person>) request.getAttribute("users");
-    for (Person user : users) {
+    ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
+    for (User user : users) {
 %>
 <h1><%= user.getUsername() %></h1>
 <%
