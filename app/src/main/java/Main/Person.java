@@ -1,19 +1,18 @@
 package Main;
 
+import lombok.Getter;
+
 public class Person {
+  @Getter
   private String  username;
-  private String password;
+  @Getter
+  private byte[] password;
+  @Getter
+  private Roles role;
 
-  public String getUsername() {
-    return username;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public Person(String username, String password) {
+  public Person(String username, byte[] password, Roles role) {
     this.username = username;
     this.password = password;
+    this.role = role;
   }
 }
