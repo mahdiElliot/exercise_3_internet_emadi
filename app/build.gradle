@@ -33,6 +33,9 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    // https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc10
+    compile group: 'com.oracle.database.jdbc', name: 'ojdbc10', version: '19.8.0.0'
 }
 
 application {
