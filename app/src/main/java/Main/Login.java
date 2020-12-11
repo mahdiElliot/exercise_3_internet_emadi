@@ -23,9 +23,6 @@ public class Login extends HttpServlet {
 
     byte[] encodedPassword = Password.getEncodedPassword(password);
 
-    // Create Admin moderator
-    users.add(new Person("admin", Password.getEncodedPassword("admin"), Roles.ADMIN));
-
     List<Person> foundUsers = users.stream().filter(p -> p.getUsername().equals(username) && Arrays.equals(p.getPassword(), encodedPassword)).collect(Collectors.toList());
 
     boolean isUserFound = foundUsers.size() > 0;
@@ -35,16 +32,17 @@ public class Login extends HttpServlet {
     if (isUserFound) {
       Roles role = foundUsers.get(0).getRole();
 
-      req.setAttribute("role", role.toString());
+      resp.setStatus(200);
 
       if (role == Roles.ADMIN) {
-        resp.sendRedirect("/app/admin");
+        resp.getWriter().println("/app/admin");
       } else {
-        resp.sendRedirect("/app/user");
+        resp.getWriter().println("/app/user");
       }
 
     } else {
-      req.getRequestDispatcher("LoginFail.jsp").forward(req, resp);
+      resp.setStatus(400);
+      resp.getWriter().println("username or password is incorrect!");
     }
   }
 }
