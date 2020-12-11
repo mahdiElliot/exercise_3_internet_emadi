@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +15,8 @@ import static Main.UserList.users;
 
 @WebServlet(name = "login", urlPatterns = {"/login"})
 public class Login extends HttpServlet {
+
+  public static Person LoggedinUser;
 
   @SneakyThrows
   @Override
@@ -33,6 +36,13 @@ public class Login extends HttpServlet {
       Roles role = foundUsers.get(0).getRole();
 
       resp.setStatus(200);
+
+      LoggedinUser = foundUsers.get(0);
+
+      HttpSession session = req.getSession();
+
+      session.setAttribute("username", username);
+      session.setAttribute("role", role);
 
       if (role == Roles.ADMIN) {
         resp.getWriter().println("/app/admin");
