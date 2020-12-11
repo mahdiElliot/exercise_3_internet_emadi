@@ -1,13 +1,13 @@
 package Main.dbutil;
 
-import Main.dbutil.utils.DatabaseUtils;
 import Main.model.User;
 import Main.utils.Password;
-import Main.utils.Roles;
+import Main.model.Roles;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class UserDbUtil {
     private Connection connection;
@@ -26,19 +26,20 @@ public class UserDbUtil {
     }
 
     public User getUser(String username) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        if (username.compareTo("admin") == 0)
-            return new User(username, Password.getEncodedPassword("admin"), Roles.ADMIN, "admin@yahoo.com");
-
         User user = new User();
-        String sql = "SELECT * FROM " + TABLE_NAME + " WHERE username = ?";
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE username = ?";
+
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
+
             while (resultSet.next()) {
                 user.setUsername(resultSet.getString("username"));
-                byte[] password = Password.getEncodedPassword(resultSet.getString("password"));
+                String password = resultSet.getString("password");
                 user.setPassword(password);
+                Roles role = Roles.valueOf(resultSet.getString("role"));
+                user.setRole(role);
                 user.setEmail(resultSet.getString("email"));
             }
             return user;
@@ -46,5 +47,31 @@ public class UserDbUtil {
             throwable.printStackTrace();
         }
         return user;
+    }
+
+    public  ArrayList<User> getUsers() {
+        ArrayList<User> users = new ArrayList<User>();
+
+        String query = "SELECT * FROM " + TABLE_NAME;
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String username = resultSet.getString("username");
+                String password = resultSet.getString("password");
+                String email = resultSet.getString("email");
+                Roles role = Roles.valueOf(resultSet.getString("role"));
+
+                User user = new User(username, password, role, email);
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return users;
     }
 }

@@ -1,10 +1,14 @@
 package Main.dbutil;
 
-import Main.dbutil.utils.DatabaseUtils;
+import Main.dbutil.utils.DatabaseConstants;
+import Main.model.Roles;
+import Main.model.User;
+import Main.utils.Password;
 
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 public class DatabaseConnection {
     private final static String DRIVER = "org.postgresql.Driver";
@@ -16,10 +20,19 @@ public class DatabaseConnection {
     }
 
     private static Connection connect() {
+
         try {
             Driver driver = (Driver) Class.forName(DRIVER).newInstance();
             DriverManager.registerDriver(driver);
-            connection = DriverManager.getConnection(DatabaseUtils.DB_URL, DatabaseUtils.DB_USERNAME, DatabaseUtils.DB_PASSWORD);
+            connection = DriverManager.getConnection(DatabaseConstants.DB_URL, DatabaseConstants.DB_USERNAME, DatabaseConstants.DB_PASSWORD);
+
+//            User admin = new User("admin", Password.getEncodedPassword("admin"), Roles.ADMIN, "admin@yahoo.com");
+//            PreparedStatement query = connection.prepareStatement("INSERT INTO site_user (username, password, email, role) values (?,?,?,?)");
+//            query.setString(1, admin.getUsername());
+//            query.setString(2, admin.getPassword());
+//            query.setString(3, admin.getEmail());
+//            query.setString(4, "ADMIN");
+//            query.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="Main.Person" %>
+<%@ page import="Main.model.User" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -26,8 +26,8 @@
             "Users List": `<ul class="list-group">
             <%
 
-                ArrayList<Person> users = (ArrayList<Person>) request.getAttribute("users");
-                for (Person user : users) {
+                ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
+                for (User user : users) {
             %>
             <li class="list-group-item item"><%= user.getUsername() %>
             <% if(!user.getUsername().equals("admin")) { %>

@@ -1,4 +1,6 @@
-package Main;
+package Main.controller;
+
+import Main.model.Roles;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet(name = "register", urlPatterns = {"/user/add"})
-public class Register extends HttpServlet {
+public class RegisterController extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     HttpSession session= req.getSession(false);
@@ -30,7 +32,6 @@ public class Register extends HttpServlet {
 
 
 
-    req.setAttribute("users", UserList.users);
     req.getRequestDispatcher("adminView.jsp").forward(req, resp);
 
   }

@@ -1,67 +1,43 @@
 package Main.model;
 
-import Main.utils.Roles;
 import lombok.Getter;
+import lombok.Setter;
 
 public class User {
   @Getter
+  @Setter
   private String username;
 
   @Getter
-  private byte[] password;
+  @Setter
+  private String password;
 
   @Getter
+  @Setter
   private String email;
 
   @Getter
+  @Setter
   private Roles role;
 
   public User() {
     username = "";
-    password = new byte[0];
+    password = "";
     email = "";
     role = Roles.ADMIN;
   }
 
-  public User(String username, byte[] password, Roles role) {
+  public User(String username, String password, Roles role) {
     this.username = username;
     this.password = password;
     this.role = role;
     this.email = "";
   }
 
-  public User(String username, byte[] password, Roles role, String email) {
+  public User(String username, String password, Roles role, String email) {
     this.username = username;
     this.password = password;
     this.role = role;
     this.email = email;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public void setPassword(byte[] password) {
-    this.password = password;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public void setRole(Roles role) {
-    this.role = role;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public byte[] getPassword() {
-    return password;
-  }
-
-  public Roles getRole() {
-    return role;
   }
 }
