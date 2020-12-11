@@ -5,14 +5,35 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="webjars/jquery/1.11.1/jquery.min.js"></script>
+    <script src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' href='webjars/bootstrap/3.2.0/css/bootstrap.min.css'>
+
     <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
 </head>
 <body>
-    <form action = "register" method = "POST">
-        First Name: <input type = "text" name = "first_name">
-        <br />
-        Last Name: <input type = "text" name = "last_name" />
-        <input type = "submit" value = "Submit" />
+    <form action = "login" method = "POST">
+        <label>
+            Username: <input required type = "text" name = "username">
+        </label>
+        <label>
+            Password: <input required type = "password" name = "password" />
+        </label>
+        <input type = "submit" value = "Login" />
     </form>
 </body>
 </html>
