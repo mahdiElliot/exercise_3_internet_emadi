@@ -66,11 +66,7 @@ public class LoginController extends HttpServlet {
     private User findUser(String username, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
         String encodedPassword = Password.getEncodedPassword(password);
         User user = userDbUtil.getUser(username);
-
-        System.out.println(encodedPassword);
-        System.out.println(user.getPassword());
-
-        if (encodedPassword.equals(user.getPassword())) {
+        if (encodedPassword.compareTo(user.getPassword()) == 0) {
             return user;
         }
         return null;
