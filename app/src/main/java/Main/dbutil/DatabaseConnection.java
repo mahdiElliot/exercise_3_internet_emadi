@@ -5,7 +5,6 @@ import Main.dbutil.config.DatabaseConstants;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 
 public class DatabaseConnection {
     private final static String DRIVER = "org.postgresql.Driver";
