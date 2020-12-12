@@ -72,6 +72,9 @@ public class UserDbUtil {
     }
 
     public boolean createUser(User user) {
+        String username = getUser(user.getUsername()).getUsername();
+        if (!(username.isEmpty() || username.isBlank())) return false;
+
         String columns = "(" + USERNAME_COLUMN + ", "
                 + PASSWORD_COLUMN + ", "
                 + EMAIL_COLUMN + ", "
