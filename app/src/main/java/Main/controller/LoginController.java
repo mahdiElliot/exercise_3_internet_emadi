@@ -50,7 +50,6 @@ public class LoginController extends HttpServlet {
             req.setAttribute("username", username);
             resp.setStatus(200);
 
-
             if (user.getRole() == Roles.ADMIN) {
                 resp.getWriter().println("/app/admin");
             } else {
@@ -59,7 +58,6 @@ public class LoginController extends HttpServlet {
 
         } else {
             resp.setStatus(400);
-            resp.getWriter().println("username or password is incorrect!");
         }
     }
 
