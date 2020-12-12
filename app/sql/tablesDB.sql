@@ -5,5 +5,3 @@ CREATE TABLE site_user (
 	email VARCHAR ( 255 ) UNIQUE NOT NULL,
 	role varchar ( 50 ) NOT NULL
 );
-
-INSERT INTO site_user VALUES (DEFAULT, 'admin', 'admin', 'admin@yahoo.com', 'ADMIN');
