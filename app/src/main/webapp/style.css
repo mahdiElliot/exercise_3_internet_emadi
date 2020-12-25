@@ -39,6 +39,9 @@ li {
     width: fit-content;
     margin-bottom: 50px;
 }
+.side-bar li:not(:first-child) {
+    cursor: pointer;
+}
 
 .side-bar a {
     color: black;

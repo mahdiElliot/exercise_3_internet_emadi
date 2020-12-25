@@ -39,7 +39,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc10
     compile group: 'com.oracle.database.jdbc', name: 'ojdbc10', version: '19.8.0.0'
-    compile group: 'org.webjars', name: 'bootstrap', version: '3.2.0'
+    compile 'org.webjars:bootstrap:4.5.3'
+    compile 'org.webjars:jquery:3.5.1'
+    compile 'org.webjars:bootstrap-glyphicons:bdd2cbfba0'
     // https://mvnrepository.com/artifact/de.rtner/PBKDF2
     compile group: 'de.rtner', name: 'PBKDF2', version: '1.1.4'
     compile group: 'javax.servlet.jsp.jstl', name: 'jstl-api', version: '1.2'

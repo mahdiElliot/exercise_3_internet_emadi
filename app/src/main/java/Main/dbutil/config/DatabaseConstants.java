@@ -1,4 +1,4 @@
-package Main.dbutil.utils;
+package Main.dbutil.config;
 
 public class DatabaseConstants {
     public final static String DB_USERNAME = "postgres";
