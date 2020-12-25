@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
+import java.util.Optional;
 
 @WebServlet(name = "login", urlPatterns = {"/login"})
 public class LoginController extends HttpServlet {
@@ -40,17 +41,17 @@ public class LoginController extends HttpServlet {
     private void login(HttpServletRequest req, HttpServletResponse resp) throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        User user = findUser(username, password);
-        if (user != null) {
+        Optional<User> user = findUser(username, password);
+        if (user.isPresent()) {
             HttpSession session = req.getSession();
 
             session.setAttribute("username", username);
-            session.setAttribute("role", user.getRole());
+            session.setAttribute("role", user.get().getRole());
 
             req.setAttribute("username", username);
             resp.setStatus(200);
 
-            if (user.getRole() == Roles.ADMIN) {
+            if (user.get().getRole() == Roles.ADMIN) {
                 resp.getWriter().println("/app/admin");
             } else {
                 resp.getWriter().println("/app/user");
@@ -61,12 +62,17 @@ public class LoginController extends HttpServlet {
         }
     }
 
-    private User findUser(String username, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    private Optional<User> findUser(String username, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
         String encodedPassword = Password.getEncodedPassword(password);
-        User user = userDbUtil.getUser(username);
-        if (encodedPassword.compareTo(user.getPassword()) == 0) {
-            return user;
+        Optional<User> user = userDbUtil.getUser(username);
+
+        if (user.isPresent()) {
+            if (encodedPassword.compareTo(user.get().getPassword()) == 0) {
+                return user;
+            }
         }
-        return null;
+
+
+        return Optional.empty();
     }
 }

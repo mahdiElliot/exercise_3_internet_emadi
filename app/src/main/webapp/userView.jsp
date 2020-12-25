@@ -1,53 +1,50 @@
+<%@ page import="Main.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>user</title>
-    <style>
-        body {
-            width: 100%;
-            text-align: center;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-        }
+    <title>User</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel='stylesheet' href='webjars/bootstrap/4.5.3/css/bootstrap.min.css'>
+    <script src="webjars/jquery/3.5.1/jquery.min.js"></script>
+    <script src="script.js"></script>
 
-        .container {
-            position: absolute;
-            min-width: 300px;
-        }
+    <script>
+        const pages = {
+            "Profile": `
+                <div>
+                    <% User me = (User) request.getAttribute("self"); %>
+                     <ul class="list-group">
+                      <li class="list-group-item">
+                        <b>Name:</b> <%= me.getUsername() %>
+                      </li>
+                    </ul>
+                    <ul class="list-group">
+                      <li class="list-group-item">
+                        <b>Email:</b> <%= me.getEmail() %>
+                      </li>
+                    </ul>
+                    <ul class="list-group">
+                      <li class="list-group-item">
+                        <b>Role:</b> <%= me.getRole() %>
+                      </li>
+                    </ul>
 
-        .info {
-            margin-top: 24px;
+                </div>
+            `,
         }
-
-        .info p {
-            border: gray solid 2px;
-            padding: 8px 12px;
-            border-radius: 8px;
-        }
-
-        .container button {
-            width: 90%;
-            padding-top: 8px;
-            padding-bottom: 8px;
-            background-color: lightblue;
-            border-color: lightblue;
-            border-radius: 12px;
-            cursor: pointer;
-        }
-    </style>
+    </script>
 </head>
 <body>
 <div class="container">
-    <h2>user's info</h2>
-    <div class="info">
-        <p>${user.username}</p>
-        <p>${user.email}</p>
-        <p>${user.role}</p>
+    <ul class="side-bar">
+        <li class="side-bar__header">User Panel</li>
+        <li>Profile</li>
+        <li><a href="${pageContext.request.contextPath}/logout">logout</a></li>
+    </ul>
+
+    <div class="content">
+
     </div>
-    <button>edit info</button>
 </div>
 </body>
 </html>

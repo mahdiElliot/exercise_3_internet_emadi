@@ -4,6 +4,7 @@ import Main.model.User;
 import Main.model.Roles;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class UserDbUtil {
     private final Connection connection;
@@ -19,7 +20,7 @@ public class UserDbUtil {
         connection = DatabaseConnection.getConnection();
     }
 
-    public User getUser(String username) {
+    public Optional<User> getUser(String username) {
         User user = new User();
         String query = "SELECT * FROM " + TABLE_NAME + " WHERE username = ?";
 
@@ -27,6 +28,10 @@ public class UserDbUtil {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.isBeforeFirst()) {
+                return Optional.empty();
+            }
 
             while (resultSet.next()) {
                 user.setUsername(resultSet.getString(USERNAME_COLUMN));
@@ -41,7 +46,7 @@ public class UserDbUtil {
         } catch (SQLException throwable) {
             throwable.printStackTrace();
         }
-        return user;
+        return Optional.of(user);
     }
 
     public  ArrayList<User> getUsers() {
@@ -71,9 +76,12 @@ public class UserDbUtil {
         return users;
     }
 
-    public boolean createUser(User user) {
-        String username = getUser(user.getUsername()).getUsername();
-        if (!(username.isEmpty() || username.isBlank())) return false;
+    public Optional<User> createUser(User user) {
+        Optional<User> foundUser = getUser(user.getUsername());
+
+        if(foundUser.isPresent()) {
+            return Optional.empty();
+        }
 
         String columns = "(" + USERNAME_COLUMN + ", "
                 + PASSWORD_COLUMN + ", "
@@ -88,11 +96,11 @@ public class UserDbUtil {
             preparedStatement.setString(4, user.getRole().toString());
             preparedStatement.executeUpdate();
             preparedStatement.close();
-            return true;
+            return Optional.of(user);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return Optional.empty();
     }
 
     public boolean updatePassword(User user) {

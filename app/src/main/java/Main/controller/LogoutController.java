@@ -21,6 +21,6 @@ public class LogoutController extends HttpServlet {
         
         session.removeAttribute("username");
         session.removeAttribute("role");
-        resp.getWriter().println("/app");
+        req.getRequestDispatcher("index.html").include(req,resp);
     }
 }

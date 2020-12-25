@@ -10,7 +10,7 @@ public class User {
 
   @Getter
   @Setter
-  private String password;
+  private transient  String password;
 
   @Getter
   @Setter

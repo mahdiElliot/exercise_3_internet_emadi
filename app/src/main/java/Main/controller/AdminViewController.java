@@ -14,68 +14,52 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Optional;
 
 @WebServlet(name = "admin", urlPatterns = {"/admin"})
 public class AdminViewController extends HttpServlet {
-    private UserDbUtil userDbUtil;
+  private UserDbUtil userDbUtil;
 
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        userDbUtil = new UserDbUtil();
+  @Override
+  public void init() throws ServletException {
+    super.init();
+    userDbUtil = new UserDbUtil();
+  }
+
+  @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    if (!isAdmin(req, resp)) return;
+    HttpSession session = req.getSession(false);
+    String self = (String) session.getAttribute("username");
+
+    Optional<User> user = userDbUtil.getUser(self);
+
+    if (user.isEmpty()) {
+      req.getRequestDispatcher("/index.html");
+      return;
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (!isAdmin(req, resp)) return;
+    req.setAttribute("self", user.get());
+    req.getRequestDispatcher("adminView.jsp").forward(req, resp);
+  }
 
-        req.setAttribute("users", userDbUtil.getUsers());
-        req.getRequestDispatcher("adminView.jsp").forward(req, resp);
+  private boolean isAdmin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    HttpSession session = req.getSession(false);
+
+    if (session == null) {
+      req.getRequestDispatcher("index.html").include(req, resp);
+      return false;
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (!isAdmin(req, resp)) return;
-        User user = new User();
-        try {
-            user.setUsername(req.getParameter("username"));
-            user.setPassword(Password.getEncodedPassword(req.getParameter("password")));
-            user.setEmail(req.getParameter("email"));
-            user.setRole(Roles.valueOf(req.getParameter("role")));
-            userDbUtil.createUser(user);
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+    String username = (String) session.getAttribute("username");
+    Roles role = (Roles) session.getAttribute("role");
+
+    if (username == null || role != Roles.ADMIN) {
+      resp.setStatus(403);
+      resp.getWriter().println("YOU CAN'T ACCESS THIS PAGE!");
+      return false;
     }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (!isAdmin(req, resp)) return;
-
-        String username = req.getParameter("username");
-        if (username.compareTo("admin") == 0) {
-            resp.getWriter().println("admin cannot be deleted!");
-        }
-        userDbUtil.deleteUser(username);
-    }
-
-    private boolean isAdmin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
-
-        if (session == null) {
-            req.getRequestDispatcher("index.html").include(req, resp);
-            return false;
-        }
-
-        String username = (String) session.getAttribute("username");
-        Roles role = (Roles) session.getAttribute("role");
-
-        if (username == null || role != Roles.ADMIN) {
-            resp.setStatus(403);
-            resp.getWriter().println("YOU CAN'T ACCESS THIS PAGE!");
-            return false;
-        }
-        return true;
-    }
+    return true;
+  }
 
 }
